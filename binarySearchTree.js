@@ -102,7 +102,7 @@ function treeIncludesRecursion(root, target){
 }
 
 function treeSumDepthFirst(root){
-    //remember to change the Nodes from letters to numbers if you want to calc properly
+    //remember to change the Node values from letters to numbers if you want to calc properly
     if ( root === null) return 0;
 
     const stack = [ root ];
@@ -118,4 +118,26 @@ function treeSumDepthFirst(root){
     
     return sum;
     
+}
+
+const treeSumRec = (root) =>{
+    //remember to change the Node values from letters to numbers if you want to calc properly
+    if (root === null){
+        return 0
+    }
+    return root.val + treeSumRec(root.left) + treeSumRec(root.right)
+}
+
+const maxPathSumRec = root => {
+    //remember to change the Node values from letters to numbers if you want to calc properly
+    //if you only have one child we need to add this requirement so code doesnt break
+    if (root === null){
+        return -Infinity;
+    }
+    //condition of a leaf
+    if(root.left === null && root.right === null){
+        return root.val;
+    }
+    const maxChildPathSum = Math.max(maxPathSumRec(root.left), maxPathSumRec(root.right));
+    return root.val + maxChildPathSum;
 }
