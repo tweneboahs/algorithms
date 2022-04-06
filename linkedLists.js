@@ -27,10 +27,10 @@ const h = new Node(7);
 e.next = f;
 f.next = g;
 g.next = h;
-//_________________________
-
 
 // 2 -> 8 -> 3-> 7 -> null
+
+//_________________________
 
 function printLinkedList(head){
     let current = head;
@@ -168,4 +168,65 @@ function reverseList(head) {
     return previous;
 } 
 
-console.log(reverseList(a))
+//console.log(reverseList(a))
+
+
+
+// ****ZIPPER LISTS****
+
+//Given
+//LL1       A -> B -> C -> D -> E -> F
+//LL2       Q -> R
+
+//Find the following output list
+//OUTPUT    A -> Q -> B -> R -> C -> D -> E -> F
+
+//LINKED LIST 1
+const A = new Node("A");
+const B = new Node("B");
+const C = new Node("C");
+const D = new Node("D");
+const E = new Node("E");
+const F = new Node("F");
+A.next = B;
+B.next = C;
+C.next = D;
+D.next = E;
+E.next = F;
+//LINKED LIST 2
+const Q = new Node("Q");
+const R = new Node("R");
+Q.next = R;
+
+function zipperList(head1, head2){
+    //tail is heling build the output of our new list
+    let tail = head1;
+    let current1 = head1.next;
+    let current2 = head2;
+    let count = 0;
+
+    while (current1 !== null && current2 !== null){
+        if (count % 2 == 0){
+            tail.next = current2;
+            current2 = current2.next;
+        } else {
+            tail.next = current1;
+            current1 = current1.next;
+        }
+        // we need to move our tail pointer so we are using the last node we put in
+        tail = tail.next;
+        count++
+    }
+
+    // once we're out of the while loop we know that either current1 or current2 has resolved to null
+    if (current1 !== null){
+        tail.next = current1;
+    }
+    if (current2 !== null){
+        tail.next = current2;
+    }
+
+    return head1;
+}
+
+//console.log(zipperList(A,Q));
