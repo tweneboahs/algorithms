@@ -78,7 +78,7 @@ const compress = (s) => {
       }
     }
     return result;
-  };
+};
 //console.log(compress("hhhhsdciidcndjjj"));
 
 const compressUseArrays = (s) => {
@@ -101,7 +101,7 @@ const compressUseArrays = (s) => {
       }
     }
     return result.join('');
-  };
+};
 //console.log(compressUseArrays("hhhhsdciidcndjjj"));
 
 
@@ -111,62 +111,76 @@ const anagrams = (s1, s2) => {
     const count = {};
     //iterate through every char of s1
     for ( let char of s1){
-      //initialize char into count object if its the first time we're seeing its
-      //can check if a key is inside of an object by ( char in count )
+        //initialize char into count object if its the first time we're seeing its
+        //can check if a key is inside of an object by ( char in count )
         //-->but we want to check if char is not (!) inside of the object
-      if(!(char in count)){
+        if(!(char in count)){
         count[char] = 0;
-      }
-      
-      count[char]++;
+        }
+        
+        count[char]++;
     }
     //now we want to check if the characters in the second string appear in the object (hash map) of the first string
     //if the character of the 2nd string appears in the 1st strings obect --> decrement the 1st strings char value by one
     //otherwise if the character doesnt appear --> return FALSE
     for ( let char of s2 ){
-      if ( char in count ){
+        if ( char in count ){
         count[char]--;
-      } else {
+        } else {
         //we've found a character that is present in s2 but not present in s1
         return false;
-      }
+        }
     }
-    
+
     //now we want to check that exactly every letter in s1 is in s2
     // to do this we will check that each value is equal to zero bc 
-      // -->if s2 has the same char but less/more amount of times it will be a neg or pos #, respectively
-      // -->if s2 does not have a char but s1 does the value in th object for s1 will be positive
-    
+        // -->if s2 has the same char but less/more amount of times it will be a neg or pos #, respectively
+        // -->if s2 does not have a char but s1 does the value in th object for s1 will be positive
+
     for (let char in count){
-      if(count[char] !== 0){
+        if(count[char] !== 0){
         return false;
-      }
+        }
     }
     return true;
-  };
+};
 
 
 
-  //MOST FREQUENT CHARACTER
-    //THIS PROBLEM IS VERY SIMILAR TO THE ANAGRAMS PROBLEM ABOVE SO REFERENCE THAT IF YOU HAVE CODE QUESTIONS
-  const mostFrequentChar = (s) => {
+//MOST FREQUENT CHARACTER
+//THIS PROBLEM IS VERY SIMILAR TO THE ANAGRAMS PROBLEM ABOVE SO REFERENCE THAT IF YOU HAVE CODE QUESTIONS
+const mostFrequentChar = (s) => {
     const count = {};
     let max = -Infinity;
     let charKey;
-    
+
     for ( let char of s){
         //REMEMBER! to put the "!" outside of the parenthesis in order to negate what's inside the parenthesis in the following line
-      if(!(char in count)){
+        if(!(char in count)){
         count[char] = 0;
-      }
-      count[char]++;
+        }
+        count[char]++;
     }
-    
-     for( let char of s){
-      if(count[char] > max){
+
+        for( let char of s){
+        if(count[char] > max){
         max = count[char];
         charKey = char;
-      }
+        }
     }
-    return charKey;
-  };
+return charKey;
+};
+
+//PAIR SUM
+const pairSum = (numbers, targetSum) => {
+    const previous = {};
+
+    for( let i = 0; i < numbers.length; i++){
+        let complement = targetSum - numbers[i];
+        if (compliment in previous){
+        return [previous[complement], i];
+        } else {
+        previous[numbers[i]] = i;
+        }
+    }
+};
