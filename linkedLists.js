@@ -32,6 +32,7 @@ g.next = h;
 
 //_________________________
 
+//print Linked List
 function printLinkedList(head){
     let current = head;
 
@@ -52,6 +53,7 @@ function printLinkedListRec(head){
     printLinkedListRec(head.next);
 };
 
+//print Linked List into Array Iterative
 function linkedListValues (head){
     let current = head;
     const values =[];
@@ -64,7 +66,7 @@ function linkedListValues (head){
 //console.log(linkedListValues(a))
 
 
-
+//print Linked List into Array Recursion
 //need to use a helper function in order to solve recursively
 function linkedListValuesRec ( head){
     const values = [];
@@ -80,7 +82,7 @@ function fillValues (head, values) {
 //console.log(linkedListValuesRec(a))
 
 
-
+//SUM LIST
 function sumList(head){
     let sum = 0;
     let current = head;
@@ -103,7 +105,7 @@ function sumListRec(head){
 //console.log(sumListRec(e))
 
 
-
+//LINKED LIST FIND
 function linkedListFind (head,target) {
     let current = head;
     while (current !== null){
@@ -123,11 +125,12 @@ function linkedListFindRec (head, target){
     if (head.val === target){
         return true;
     }
+    //need the "return" on the next line bc it will pass the boolean of true or false from the above cases up the call stack
     return linkedListFindRec(head.next, target);
 };
 //console.log(linkedListFindRec(a,"A"))
 
-
+//GET NODE VALUE
 function getNodeValue(head, index){
     let ourIndex = 0;
     let current = head;
@@ -155,12 +158,16 @@ function getNodeValueRec( head, index ){
 }
 //console.log(getNodeValueRec(a, 8))
 
+
+//REVERSE LIST
 function reverseList(head) {
     let current = head;
     let previous = null;
 
     while (current !== null){
+        // this next must be inside the while loop in order to work!
         let next = current.next;
+        //the placement of the lines matter so that each node is presented correctly in the next iteration
         current.next = previous;
         previous = current;
         current = next;
@@ -169,6 +176,15 @@ function reverseList(head) {
 } 
 
 //console.log(reverseList(a))
+
+function reverseListRec(head, prev = null){
+    if ( head === null){
+        return prev;
+    }
+    const next = head.next;
+    head.next = prev;
+    return reverseListRec(next, head);
+}
 
 
 
@@ -198,8 +214,8 @@ const Q = new Node("Q");
 const R = new Node("R");
 Q.next = R;
 
-function zipperList(head1, head2){
-    //tail is heling build the output of our new list
+function zipperLists(head1, head2){
+    //tail is helping build the output of our new list
     let tail = head1;
     let current1 = head1.next;
     let current2 = head2;
@@ -218,7 +234,7 @@ function zipperList(head1, head2){
         count++
     }
 
-    // once we're out of the while loop we know that either current1 or current2 has resolved to null
+    // once we're out of the while loop we know that either current1 or current2 has resolved to null so we need to add whichever other list has nodes to the end of our combined list
     if (current1 !== null){
         tail.next = current1;
     }
@@ -229,4 +245,33 @@ function zipperList(head1, head2){
     return head1;
 }
 
-//console.log(zipperList(A,Q));
+//console.log(zipperLists(A,Q));
+
+
+const zipperListsRec = (head1, head2) => {
+    // need to stop recursion if either head1 or head2 is null - need a base case
+    if (head1 === null && head2 ===null){
+        return null;
+    }
+    //what if only one of them is null? - just return the remainder of head2 and vice versa
+    //two other base cases
+    if(head1 === null) {
+        return head2;
+    }
+    if(head2 === null) {
+        return head1;
+    }
+    // now we need recursive code
+    //take 2 nodes at a time - remember that before you override a pointer you need to save it in a variable
+
+    const next1 = head1.next;
+    const next2 = head2.next;
+    head1.next = head2;
+    // so through recursion were always going head1-> head2 return head1-> head2 return head1-> head2...
+    head2.next = zipperListsRec(next1, next2);
+
+    return head1;
+  
+};
+
+//console.log(zipperListsRec(A,Q));
