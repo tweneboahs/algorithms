@@ -184,3 +184,76 @@ const pairSum = (numbers, targetSum) => {
         }
     }
 };
+
+
+//INTERSECTION
+//could also solve this problem using a nexted loop but wld result in O(n^2) time complexity
+function intersection(a, b){
+    const result = [];
+
+    // here we can create a Set which is a collection of unique values. Each value can only occur once in a Set. I guess you would use a set instead of an array because it has O(1) lookup time complexity
+    // we could have also used a hash table - which is how i originally thought to solve the problem
+    const items = new Set();
+
+    for ( let item of a){
+        items.add(item);
+    }
+
+    for ( let element of b){
+        if( items.has(element)){
+            result.push(element);
+        }
+    }
+
+    return result;
+};
+
+//console.log(intersection([4,2,1,6], [3,6,9,2,10])
+
+const intersectionHash = (a, b) => {
+    const crossover = [];
+    const aObj = {};
+    
+    for ( let i = 0; i < a.length; i++){
+      let current = a[i];
+      if( !(current in aObj)){
+        //apparently you need the (=0) in the next line in order for the code to work
+        aObj[current]=0;
+      }
+    }
+    
+    for ( let i = 0; i < b .length; i++){
+      let current = b[i];
+      if( current in aObj ){
+        crossover.push(current);
+        delete aObj[current];
+      }
+    }
+    return crossover;
+  };
+  //console.log(intersectionHash([4,2,1,6], [3,6,9,2,10])
+
+
+
+  //FIVE SORT
+
+const fiveSort = (nums) => {
+    let j = nums.length - 1;
+    let i = 0;
+    while ( j >= i ){
+        if ( nums[j] === 5){
+            j--;
+        } else if (nums[i] === 5){
+            //this is a way to switch elements in an array
+            [ nums[i], nums[j] ] = [ nums[j], nums[i] ];
+            i++;
+        } else {
+            i++;
+        }
+    }
+
+
+    return nums;
+};
+
+console.log(fiveSort([1,5,6,3,7,5,6]))
