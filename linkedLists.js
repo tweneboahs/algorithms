@@ -275,3 +275,94 @@ const zipperListsRec = (head1, head2) => {
 };
 
 //console.log(zipperListsRec(A,Q));
+
+
+//MERGE LISTS
+
+//My Solution
+
+const mergeListsSarah = (head1, head2) => {
+    let tail;
+    let current1 = head1;
+    let current2 = head2;
+    
+    if (head1.val <= head2.val){
+      tail = head1;
+      current1 = head1.next;
+    } else {
+      tail = head2;
+      current2 = head2.next;
+    }
+    
+    while (current1 !== null && current2 !== null){
+      if( current1.val <= current2.val){
+        // create a link to new node at the end of the merged list
+        tail.next = current1;
+        //update current1 value since old value has already been linked to merged list
+        current1 = current1.next;
+      } else {
+        // create a link to new node at the end of the merged list
+        tail.next = current2;
+        //update current1 value since old value has already been linked to merged list
+        current2 = current2.next;
+      }
+      //update tail so it correlates to the end of the merged list
+      tail = tail.next;
+    }
+    
+    // if one of the lists is empty tack on the other lists nodes to the end of the merged list
+    if(current1 === null){
+      tail.next = current2;
+    }
+    if(current2 === null){
+      tail.next = current1;
+    }
+    
+    //based off of whichever head value was smaller we want to start the merged list there based off of the prompt
+    if (head1.val<= head2.val){
+      return head1;
+    } else{
+      return head2;
+    }
+};
+
+//Structy Solution
+const mergeLists = (head1, head2) => {
+    let dummyHead = new Node(null);
+    let tail = dummyHead;
+    let current1 = head1;
+    let current2 = head2;
+    
+    while (current1 !== null && current2 !== null) {
+      if (current1.val < current2.val) {
+        tail.next = current1;
+        current1 = current1.next;
+      } else {
+        tail.next = current2;
+        current2 = current2.next;
+      }
+      tail = tail.next;
+    }
+    
+    if (current1 !== null) tail.next = current1;
+    if (current2 !== null) tail.next = current2;
+    
+    return dummyHead.next;
+};
+
+
+const mergeListsRec = (head1, head2) => {
+    if (head1 === null && head2 === null) return null;
+    if (head1 === null) return head2;
+    if (head2 === null) return head1;
+  
+    if (head1.val < head2.val) {
+      const next1 = head1.next;
+      head1.next = mergeListsRec(next1, head2);
+      return head1;
+    } else {
+      const next2 = head2.next;
+      head2.next = mergeListsRec(head1, next2);
+      return head2;
+    }
+};
