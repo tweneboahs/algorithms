@@ -366,3 +366,64 @@ const mergeListsRec = (head1, head2) => {
       return head2;
     }
 };
+
+
+//IS UNIVALUE LIST
+
+//Iterative Solution
+const isUnivalueList = (head) => {
+    const savedVal = head.val;
+    current = head;
+    
+    while ( current !== null){
+      if ( current.val !== savedVal){
+        return false;
+      }
+      current = current.next;
+    }
+    return true;
+};
+
+
+//Recursive Solution
+const isUnivalueListRec = (head, prevVal = null) => {
+    //represents that you have made it to the end of the list and all nodes have been equal to one another
+    if (head === null) return true;
+    //make sure that you dont return false just because you are at the start of the list
+    if (prevVal === null || prevVal === head.val) {
+        //use recursion if the two values are equal
+      return isUnivalueListRec(head.next, head.val);
+    } else {
+        //if prev and head are not equal return false
+      return false;
+    }
+};
+
+
+
+//LONGEST STREAK
+
+//Structy only solved iterative solution
+const longestStreak = (head) => {
+    let maxStreak = 0;
+    let currentStreak = 0;
+    let currentNode = head;
+    let prevVal = null;
+    
+    while (currentNode !== null) {
+      if (currentNode.val === prevVal) {
+        currentStreak += 1;
+      } else {
+        currentStreak = 1;
+      }
+      
+      if (currentStreak > maxStreak) {
+        maxStreak = currentStreak;
+      }
+      
+      prevVal = currentNode.val;
+      currentNode = currentNode.next;
+    }
+    
+    return maxStreak;
+};
