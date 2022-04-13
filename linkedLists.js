@@ -427,3 +427,67 @@ const longestStreak = (head) => {
     
     return maxStreak;
 };
+
+
+//INSERT NODE
+const insertNode = (head, value, index) => {
+    if (index === 0) {
+      const newHead = new Node(value);
+      newHead.next = head;
+      return newHead;
+    }
+    
+    let count = 0;
+    let current = head;
+    while (current !== null) {
+      if (count === index - 1) {
+        const next = current.next;
+        current.next = new Node(value);
+        current.next.next = next;
+      }
+      
+      count += 1;
+      current = current.next;
+    }
+    return head;
+};
+
+
+//CREATE LINKED LIST
+
+//Sarahs Solution -> for (let i=0; i<....)
+
+const createLinkedList = (values) => {
+    const dummyHead = new Node(null);
+    let tail = dummyHead;
+    
+    for( let i = 0; i < values.length; i++){
+      tail.next = new Node(values[i]);
+      //this will move the tail pointer to the tail we just created
+      tail = tail.next;
+    }
+    //need to return the value next to the dummy head
+    return dummyHead.next;
+};
+
+
+//Structy Solution -> for (let val of values)
+
+const createLinkedList = (values) => {
+    const dummyHead = new Node(null);
+    let tail = dummyHead;
+    for (let val of values) {
+      tail.next = new Node(val);
+      tail = tail.next;
+    }
+    return dummyHead.next;
+};
+
+//Recursive Solution
+
+const createLinkedListRec = (values, i = 0) => {
+    if (i === values.length) return null;
+    const head = new Node(values[i]);
+    head.next = createLinkedListRec(values, i + 1);
+    return head;
+};
