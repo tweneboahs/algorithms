@@ -491,3 +491,74 @@ const createLinkedListRec = (values, i = 0) => {
     head.next = createLinkedListRec(values, i + 1);
     return head;
 };
+
+
+//ADD LISTS
+//Iterative
+const addLists = (head1, head2) => {
+    const dummyHead = new Node(null);
+    //use tail to build out LL output
+    let tail = dummyHead;
+    //initialize carry to zero
+    let carry = 0;
+    let current1 = head1;
+    let current2 = head2;
+    
+    //keep iterating through the while loop while i still have things to add up
+    while (current1 !== null || current2 !== null || carry === 1){
+      //if current pointer is null -> substitute a zero in its place
+      const val1 = current1 === null ? 0 : current1.val;
+      const val2 = current2 === null ? 0 : current2.val;
+      const sum = val1 + val2 + carry;
+      carry = sum > 9 ? 1 : 0;
+      const digit = sum % 10;
+      
+      //need to add some logic in case one list is longer than another and the shorter list is pointing at a node of null
+      // if you are at a null you can just stay at null so you can keep subsituting zeros for the values
+      if( current1 !== null ){
+        current1 = current1.next;
+      }
+      if ( current2 !== null ){
+        current2 = current2.next;
+      }
+      
+      tail.next = new Node(digit);
+      tail = tail.next;
+    }
+    return dummyHead.next;
+};
+
+//Recursive
+//in the recursive version we have the advantage of not needing a dummy head because we can just tack on the recursive call to add a node to our list -> not the case for the iterative solution
+const addListsRec = (head1, head2, carry = 0) => {
+    //step 1 - make sure that both LL have nodes in them
+    // need to add a case for if there is a final carryover of one 
+    if( head1 === null && head2 === null && carry ===0){
+      return null;
+    }
+    // want to treat any null nodes as zero
+    const val1 = head1 === null ? 0 : head1.val;
+    const val2 = head2 === null ? 0 : head2.val;
+    
+    //if you pass step 1 now we can compute the new node values
+    //remember that digit variable should always be a single digit number 
+    const sum = val1 + val2 + carry;
+    //check if the sum is 10 or greater
+    //add carry to the argument parameters
+    const nextCarry = sum > 9 ? 1 : 0;// remember that this carry wont be used in this addtion on numbers but will be used in the next iteration
+    //from the sum we can derive the digit
+    const digit = sum % 10; //remember % is will give you the remainder
+    
+    //now we can create a new node with this digit
+    const resultNode = new Node(digit);
+    
+    // can only pass head.next to the recursive call if it is not null bc if head = null then head.next doesnt make sense
+    const next1 = head1 === null ? null : head1.next;
+    const next2 = head2 === null ? null : head2.next;
+    
+    //want to make sure that we can chain this node to the other output -> recursion 
+    resultNode.next = addListsRec(next1, next2, nextCarry);
+    
+    return resultNode;
+    
+};
