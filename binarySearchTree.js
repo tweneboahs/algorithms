@@ -145,3 +145,65 @@ const maxPathSumRec = root => {
     const maxChildPathSum = Math.max(maxPathSumRec(root.left), maxPathSumRec(root.right));
     return root.val + maxChildPathSum;
 };
+
+
+
+//PATHFINDER
+    //RECURSIVE SOLUTION ONLY
+
+const pathFinderRec1 = (root, target) => {
+    //start with base cases
+    // whenever you have a binary tree case you are more likely going to check whether the input is null
+    if ( rooot === null ) return null;
+    // think like if someone gave you a single array that just included the target then you wld just return the target
+    if (root.val ===target) return [root.val];
+    
+    //for recursive code you know you're going to make to calls to your left and right children
+    const leftPath = pathFinderRec1(root.left, target);
+    const rightPath = pathFinderRec1(root.right, target);
+    
+    //need to check which, or any, of them are not null
+    if( leftPath !== null){
+      //include everything in the left path as well as yourself
+      return [root.val, ...leftPath] //using the spread operator can give you a n^2 time so in the next try lets push this value to the array in the root.val
+    }
+    if( rightPath !== null){
+      //include everything in the left path as well as yourself
+      return [root.val, ...rightPath]//using the spread operator can give you a n^2 time so in the next try lets push this value to the array in the root.val
+    }
+    
+    // if we haven't found the target in either subtree then it must not be there and then we can return false
+    return null;
+};
+
+
+//heres another recursive function that runs faster bc we dont have to worry about the spread operator having to create an array and slow down our time
+const pathFinderRec2 = (root, target) => {
+    const result = pathFinderHelperRec2(root, target);
+    if (result === null) {
+      return null;
+    } else {
+      return result.reverse();
+    }
+};
+  
+
+//need a helper function in order to produce the array we want - the main function will reverse the array since we will have everything in the opposite order
+const pathFinderHelperRec2 = (root, target) => {
+    if (root === null) return null;
+    if (root.val === target) return [ root.val ];
+    
+    const leftPath = pathFinderHelperRec2(root.left, target);
+    if (leftPath !== null) {
+      leftPath.push(root.val);
+      return leftPath;
+    }
+    
+    const rightPath = pathFinderHelperRec2(root.right, target);
+    if (rightPath !== null) {
+      rightPath.push(root.val);
+      return rightPath;
+    }
+    
+    return null;
+};
