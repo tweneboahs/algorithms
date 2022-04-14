@@ -98,6 +98,10 @@ function treeIncludesRecursion(root, target){
     if (root.val === target){
         return true;
     }
+    // this return will give back boolean data
+    //false || false => false
+    //false || true => true
+    //true || true => true
     return treeIncludesRecursion(root.left, target) || treeIncludesRecursion(root.right, target);
 }
 
