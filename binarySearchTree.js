@@ -126,7 +126,7 @@ const treeSumRec = (root) =>{
         return 0
     }
     return root.val + treeSumRec(root.left) + treeSumRec(root.right)
-}
+};
 
 const maxPathSumRec = root => {
     //remember to change the Node values from letters to numbers if you want to calc properly
@@ -140,4 +140,4 @@ const maxPathSumRec = root => {
     }
     const maxChildPathSum = Math.max(maxPathSumRec(root.left), maxPathSumRec(root.right));
     return root.val + maxChildPathSum;
-}
+};
