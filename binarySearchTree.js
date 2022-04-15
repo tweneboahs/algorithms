@@ -252,3 +252,47 @@ const howHigh = (node) => {
     const rightHeight = howHigh(node.right);
     return 1 + Math.max(leftHeight, rightHeight);
 };
+
+
+
+//BOTTOM RIGHT VALUE
+
+//BREADTH FIRST SOLUTION ONLY
+
+const bottomRightValue = (root) => {
+    // todo
+    const queue = [ root ];
+    let current;
+     while (queue.length > 0){
+      current = queue.shift();
+      current.left && queue.push(current.left);
+      current.right && queue.push(current.right);
+    }
+    return current.val;
+};
+
+
+
+
+//ALL TREE PATHS
+//RECURSIVE SOLUTION ONLY
+
+const allTreePaths = (root) => {
+    if (root === null) return [ ];
+    
+    if (root.left === null && root.right === null) return [ [root.val] ]
+    
+    const paths = [];
+    
+    const leftSubPaths = allTreePaths(root.left);
+    for (let subPath of leftSubPaths) {
+      paths.push([ root.val, ...subPath ]);
+    }
+    
+    const rightSubPaths = allTreePaths(root.right);
+    for (let subPath of rightSubPaths) {
+      paths.push([ root.val, ...subPath ]);
+    }
+    
+    return paths;
+};
