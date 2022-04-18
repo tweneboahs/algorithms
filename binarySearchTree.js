@@ -345,4 +345,82 @@ const treeLevels = (root) => {
   
     _treeLevels(root.left, levels, levelNum + 1);
     _treeLevels(root.right, levels, levelNum + 1);
-  };
+};
+
+
+
+//LEVEL AVERAGES
+//USING RECURSION AND HELPER FUNCTIONS
+const levelAverages = (root) => {
+    //the fill levels function is going to mutate the levels array
+    const levels = [];
+    fillLevels(root, levels, 0);
+    const avgs = [];
+    for (let level of levels){
+      avgs.push(getAvg(level));
+    }
+    return avgs;
+};
+  
+//write a helper function that will find every level of the tree
+//so we can already have the values in the subarrays
+const fillLevels = (root, levels, levelNum) => {
+    if ( root ===null) return;
+    
+    if ( levels.length === levelNum){
+      levels.push([root.val]);
+    } else {
+      levels[levelNum].push(root.val);
+    }
+    
+    fillLevels(root.left, levels, levelNum + 1);
+    fillLevels(root.right, levels, levelNum + 1);
+};
+  
+//write another helper function to create averages
+const getAvg = (array) =>{
+    let sum = 0;
+    for ( let num of array ){
+      sum += num;
+    }
+    return (sum / array.length);
+};
+
+
+
+
+
+//LEAF LIST
+//ITERATIVE
+const leafList = (root) => {
+    // todo
+    if ( root === null ) return [];
+    const leaves = [];
+    const stack = [ root ];
+    
+    while ( stack.length > 0 ){
+      const current = stack.pop();
+      current.right !== null && stack.push(current.right);
+      current.left !== null && stack.push(current.left);
+      if (current.left ===null && current.right === null){
+        leaves.push(current.val)
+      }
+    }
+    return leaves;
+};
+
+
+
+//RECURSIVE WITH HELPER FUNCTION
+const leafList = (root) => {
+    const leaves = [];
+    fillLeaves(root, leaves);
+    return leaves;
+};
+  
+const fillLeaves = (root, leaves) => {
+    if (root === null) return;
+    if (root.left === null && root.right === null) leaves.push(root.val);
+    fillLeaves(root.left, leaves);
+    fillLeaves(root.right, leaves);
+};
