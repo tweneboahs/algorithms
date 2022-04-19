@@ -60,6 +60,8 @@ function breadthFirstPrint(graph,source){
 //     console.log('nothing is here')
 // } 
 
+
+//HAS PATH
 function hasPathDepthFirst(graph, source, target){
     const stack = [source];
     while (stack.length > 0){
@@ -75,11 +77,22 @@ function hasPathDepthFirst(graph, source, target){
 };
 //console.log(hasPathDepthFirst(graph, 'b', 'e')) 
 
-function hasPathDepthFirstRec (graph, source, target){
+//RECURSIVE
+const hasPath = (graph, src, dst) => {
+    if (src === dst) return true;
+  
+    for (let neighbor of graph[src]) {
+      if (hasPath(graph, neighbor, dst) === true) {
+        return true;
+      }
+    }
+  
+    return false;
+};
 
-}
 
-//UNDIRECTED PATH
+
+//UNDIRECTED PATH - recursive way only shown on structy
 //Need to build a helper function that will turn edges array into a node object
 const edges =[
     ['i', 'j'],
@@ -89,35 +102,86 @@ const edges =[
     ['o', 'n']
 ];
 
-function buildGraph(edges){
+const undirectedPath = (edges, nodeA, nodeB) => {
+    //convert edge list into an adjacency list
+    const graph = buildGraph(edges);
+    //the hasPath function shld return a boolean
+    // pass a set to check whether or not the nodes have been visited before
+    return hasPath(graph, nodeA, nodeB, new Set());
+};
+  
+const hasPath = (graph, src, dst, visited) => {
+    //base case
+    //you have succesfully found a path when source is equal to destination => return true
+    if (src === dst) return true;
+    //check if src node is already in visited set -> return false
+    //theres no reason to travel through this node anymore
+    if ( visited.has(src) ) return false;
+    //if it is not already in the set then it has not been visited and shld be added to the set
+    visited.add(src);
+    
+    //if source is not equal to dst - keep looking through neighbors of source node
+    for ( let neighbor of graph[src] ){
+      //in recursive call want to use the same graph, dst and visted Set (need to know where i've been in the past) and change the source of the search
+      //if neighbor has a path to the destination then source must also have a path to the destination
+      if( hasPath(graph, neighbor, dst, visited) === true){
+        return true;
+      }
+    }
+    //if we find that none of our neighbor ever make a winning path then return false
+    return false;
+};
+  
+const buildGraph = (edges) => {
     const graph = {};
-
-    for (let edge of edges){
-        const[ a, b ] = edge;
-        if (!( a in graph)){
-            graph[a] = [];
-        }
-        if (!( b in graph)){
-            graph[b] = [];
-        }
-        graph[a].push(b);
-        graph[b].push(a);
+    
+    //want to fill graph with info on edges
+    for ( let edge of edges ){
+      //we know a single edge wld be a pair so destructure this
+      const [ a, b ] = edge;
+      // want to initialize these nodes as keys of the graph object
+      //if "a" node is not in the graph => initialize it as a key in the graph with an empty array. Same for "b"
+      if(!(a in graph)){
+        graph[a] = [];
+      }
+      if(!(b in graph)){
+        graph[b] = [];
+      }
+      //bc this is an undirected graph we have to push both ways
+      graph[a].push(b);
+      graph[b].push(a);
     }
+    
     return graph;
-}
-
-function undirectedPathBreadthFirst(graph, source, target){
-    queue = [source];
-
-    while ( source.length > 0){
-        current = queue.shift();
-        if(current = target){
-            return true;
-        }
-        for(neighbor of graph[current]){
-            queue.push(neighbor);
-        }
-    }
 };
 
-console.log(buildGraph(edges))
+
+
+//CONNECTED COMPONENT COUNT
+
+const connectedComponentsCount = (graph) => {
+    const visited = new Set();
+    let count = 0
+    //iterative code
+    //need to begin a traversal at every node
+    //use for-in bc we are given an obect, not an array
+    for (let node in graph){   
+      // want this function to do a traversal from that node as far as possible
+      if ( explore(graph, node, visited) === true){
+       count++; 
+      }
+    }
+    return count;
+  };
+  
+  const explore = (graph, current, visited) => {
+    //need to make sure that key value pairs are both strings as opposed to keys being strings and values being numbers
+    if ( visited.has(String(current)) ) return false;
+    visited.add(String(current));
+    
+    for ( let neighbor of graph[current] ){
+      explore(graph, neighbor, visited);
+    }
+    //returning true means you have explored this current node as far as posible
+    return true;
+  };
