@@ -172,9 +172,9 @@ const connectedComponentsCount = (graph) => {
       }
     }
     return count;
-  };
+};
   
-  const explore = (graph, current, visited) => {
+const explore = (graph, current, visited) => {
     //need to make sure that key value pairs are both strings as opposed to keys being strings and values being numbers
     if ( visited.has(String(current)) ) return false;
     visited.add(String(current));
@@ -184,4 +184,4 @@ const connectedComponentsCount = (graph) => {
     }
     //returning true means you have explored this current node as far as posible
     return true;
-  };
+};
