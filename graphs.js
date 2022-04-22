@@ -185,3 +185,51 @@ const explore = (graph, current, visited) => {
     //returning true means you have explored this current node as far as posible
     return true;
 };
+
+
+
+
+
+//SHORTEST PATH
+
+
+const shortestPath = (edges, nodeA, nodeB) => {
+    const graph = buildGraph(edges);
+    //if something is added to the queue it shld also be added to the set
+    //for a Set if you want to intitialize it with some values you have to create an array with those values
+    const visited = new Set([ nodeA ]);
+    
+    //work in BF logic
+    const queue = [ [nodeA, 0] ];//use starting point as initial value
+    
+    while ( queue.length > 0 ){
+      const [ node, distance ] = queue.shift();
+      
+      if (node === nodeB) return distance;
+      
+      //if the node is not the target, push its neighbors
+      for ( let neighbor of graph[node] ){
+        //only if the neighbor has not been visited shld you add it to the queue
+        if (!(visited.has(neighbor))){
+          visited.add(neighbor);
+          queue.push([ neighbor, distance + 1 ])
+        } 
+      }
+    }
+    return -1;
+};
+  
+  
+const buildGraph = (edges) =>{
+    const graph = {};
+    
+    //iterate through every edge pair given in edges
+    for( let edge of edges){
+      const [ a, b ] = edge;
+      if(!(a in graph)) graph[a] = [];
+      if(!(b in graph)) graph[b] = [];
+      graph[a].push(b);
+      graph[b].push(a);
+    }  
+    return graph;
+};
