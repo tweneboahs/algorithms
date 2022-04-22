@@ -308,3 +308,93 @@ const explore = ( grid, r, c, visited) => {
     //if we return true it means that we have discovered a brand new island
     return true;
 };
+
+
+
+
+
+
+//MINIMUM ISLAND
+
+const minimumIsland = (grid) => {
+    const visited = new Set();
+    
+    let minSize = Infinity;
+    
+    for ( let r = 0; r < grid.length; r++ ){
+      for ( let c= 0; c < grid[0].length; c++){
+        const size = exploreSize(grid, r, c, visited);
+        if ( size > 0 && size < minSize ){
+          minSize = size;
+        }
+      }
+    }
+    return minSize;
+};
+  
+const exploreSize = (grid, r, c, visited) =>{
+    //base cases
+    //1. check if position is inbounds
+    const rowInbounds = 0 <= r && r < grid.length;
+    const colInbounds = 0 <= c && c < grid[0].length;
+    if (!rowInbounds || !colInbounds) return 0;
+    
+    //2. check if position is water
+    if ( grid[r][c] === 'W' ) return 0;
+    
+    //3. check if position has already been visited
+    const pos = r + "," + c;
+    if(visited.has(pos)) return 0;
+    //if it hasnt been visited you must be visiting it right now so add it to the visited set
+    visited.add(pos);
+    
+    //recursive code
+    let size = 1;
+    size += exploreSize(grid, r - 1, c, visited);
+    size += exploreSize(grid, r + 1, c, visited);
+    size += exploreSize(grid, r, c - 1, visited);
+    size += exploreSize(grid, r, c + 1, visited);
+    return size;
+};
+
+
+
+//CLOSEST CARROT
+//THIS CODE DIDNT PASS THE TESTS IN STRUCTY BUT I DONT KNOW WHAT IS INCORRECT AND I WANT TO KEEP IT IN BC I HAVE NOTES THROUGHOUT THE CODE 
+
+const closestCarrot = (grid, startRow, startCol) => {
+    //remember when something is in the queue it should be added to the set already
+    //remember in sets we cannot save positions as an array of numbers like [r,c] so will instead have to convert them into strings
+    const visited = new Set([ startRow + ',' + startCol ]);
+    
+    //want the starting position in queue as well as the distance from starting position
+    const queue = [ [ startRow, startCol, 0 ] ];
+    
+    while ( queue.length > 0 ){
+      const [ row, col, distance ] = queue.shift();
+      
+      if ( grid[row][col] === "C" ) return distance;
+      
+      //deltas gives all of the changes to the row and column needed for the "for - of" loop to access the neighbors
+      //remember to use this trick in order to solve graph problems
+      const deltas = [[1, 0], [-1, 0], [0, 1] [0, -1]];
+      
+      for ( let delta of deltas ){
+        const [ rowDelta, colDelta ] = delta;
+        const neighborRow = row + rowDelta;
+        const neighborCol = col + colDelta;
+        
+        //check if the neighbor row and columns are in bounds
+        const rowInbounds = 0 <= neighborRow && neighborRow < grid.length;
+        const colInbounds = 0 <= neighborCol && neighborCol < grid[0].length;
+        const pos = neighborRow + '+' + neighborCol;
+        if (rowInbounds && colInbounds && grid[neighborRow][neighborCol] !== 'X' && !visited.has(pos)){
+          queue.push([ neighborRow, neighborCol, distance + 1 ]);
+          visited.add(pos);
+        }
+      }
+    }
+    
+    // if queue is empty and you never hit a carrot that must mean there is no path between starting position and a carrot
+    return -1;
+};
