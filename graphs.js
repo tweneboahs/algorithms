@@ -188,6 +188,36 @@ const explore = (graph, current, visited) => {
 
 
 
+//LARGEST COMPONENT
+const largestComponent = (graph) => {
+    const visited = new Set();
+    let longest = 0;
+    for ( let node in graph){
+      //the output of this shld be the size of the component
+      const size = exploreSize(graph, node, visited);
+      if ( size > longest ){
+        longest = size;
+      }
+    }
+    return longest;
+};
+  
+const exploreSize = (graph, node, visited) => {
+    //check if you've visited node already
+    if(visited.has(node)) return 0;
+    
+    visited.add(node);
+    let size = 1; // represents the current node we're on right now
+    //do recursive calls on the neighbor of the node
+   
+    for ( let neighbor of graph[node] ){
+      size += exploreSize(graph, neighbor, visited);
+      //assume this exploreSize function is working and if its working it wld give back the size of the component so far
+    }
+    return size;
+};
+
+
 
 
 //SHORTEST PATH
@@ -232,4 +262,49 @@ const buildGraph = (edges) =>{
       graph[b].push(a);
     }  
     return graph;
+};
+
+
+
+
+//ISLAND COUNT
+
+const islandCount = (grid) => {
+    //assume positions are the nodes of the new graph
+    const visited = new Set();
+    let count = 0;
+    
+    //keep in mind the length of the rows might differ from the columns
+    for (let r = 0; r < grid.length; r++){
+      for (let c = 0; c < grid[0].length; c++){
+        if (explore( grid, r, c, visited)){
+          count++;
+        }
+      }
+    }
+    return count;
+};
+  
+const explore = ( grid, r, c, visited) => {
+    //make sure that position is inbound
+    const rowInbounds = 0 <= r && r < grid.length;
+    const colInbounds = 0 <= c && c < grid[0].length;
+    if(!rowInbounds || !colInbounds) return false;
+    
+    //what if the position is water?
+    if (grid[r][c] === 'W') return false;
+    
+    //in sets we cannot save positions as an array of numbers like [r,c] so will instead have to convert them into strings
+    const pos = r + "," + c;
+    if (visited.has(pos)) return false;
+    visited.add(pos);
+    
+    //now we can add recursive code
+    explore(grid, r - 1, c, visited);//up
+    explore(grid, r + 1, c, visited);//down
+    explore(grid, r, c - 1, visited);//left
+    explore(grid, r, c + 1, visited);//right
+    
+    //if we return true it means that we have discovered a brand new island
+    return true;
 };
