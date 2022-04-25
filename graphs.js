@@ -398,3 +398,40 @@ const closestCarrot = (grid, startRow, startCol) => {
     // if queue is empty and you never hit a carrot that must mean there is no path between starting position and a carrot
     return -1;
 };
+
+
+
+
+//LONGEST PATH
+
+const longestPath = (graph) => {
+    //over time eant to create distances object
+    const distance = {};
+    //find terminal nodes
+    for ( let node in graph){
+      if ( graph[node].length === 0){
+        distance[node] = 0;
+      }
+    }
+    
+    //depth 1st traversal on every potential starting node
+    for ( let node in graph ){
+      traverseDistance(graph, node, distance);
+    }
+    
+    return Math.max(...Object.values(distance))
+};
+  
+function traverseDistance(graph, node, distance){
+    //base case is prob the trickiest part
+    if (node in distance) return distance[node];
+    
+    let maxLength = 0;
+    for ( let neighbor of graph[node] ) {
+      const attempt = traverseDistance(graph, neighbor, distance);
+      if ( attempt > maxLength ) maxLength = attempt;
+    }
+    
+    distance[node] = 1 + maxLength;
+    return distance[node];
+};
