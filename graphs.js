@@ -435,3 +435,215 @@ function traverseDistance(graph, node, distance){
     distance[node] = 1 + maxLength;
     return distance[node];
 };
+
+
+
+
+// SEMESTERS REQUIRED
+
+const semestersRequired = (numCourses, prereqs) => {
+    //convert edge into an adjacency list
+    const graph = buildGraph(numCourses, prereqs);
+    const distance = {};
+    for ( let course in graph ){
+      //need number of nodes not edges
+      if ( graph[course].length ===0) distance[course] = 1;
+    }
+    
+    for ( let course in graph ){
+      traverseDistance(graph, course, distance);
+    }
+    return Math.max(...Object.values(distance))
+};
+  
+function traverseDistance(graph, node, distance){
+    //BASE CASE - if we have already visited the node then just return its distance
+    if ( node in distance ) return distance[node];
+    
+    let maxDistance = 0;
+    for ( let neighbor of graph[node] ){
+      const neighborDistance = traverseDistance(graph, neighbor, distance);
+      if( neighborDistance > maxDistance ) maxDistance = neighborDistance;
+    }
+    distance[node] =  1+ maxDistance;
+    return distance[node];
+};
+  
+function buildGraph(numCourses, prereqs){
+    const graph = {};
+    
+    for ( let i = 0; i < numCourses; i++){
+      graph[i] = []; 
+    }
+    
+    for ( let prereq of prereqs ){
+      //this is a directed graph so do not make symmetric
+      const [ a, b ] = prereq;
+      graph[a].push(b);
+    }
+    
+    return graph;
+};
+
+
+
+
+
+//BEST BRIDGE
+
+const bestBridge = (grid) => {
+    let mainIsland;
+    for (let r = 0; r < grid.length; r += 1) {
+      for (let c = 0; c < grid[0].length; c += 1) {
+        const possibleIsland = traverseIsland(grid, r, c, new Set());
+        if (possibleIsland.size > 0) {
+          mainIsland = possibleIsland;
+          break;
+        }
+      }
+    }
+    
+    const visited = new Set(mainIsland);
+    const queue = [];
+    for (let pos of mainIsland) {
+      const [ row, col ] = pos.split(',').map(Number);
+      queue.push([row, col, 0]);
+    }
+    
+    while (queue.length > 0) {
+      const [ row, col, distance ] = queue.shift();
+      
+      const pos = row + ',' + col;
+      if (grid[row][col] === 'L' && !mainIsland.has(pos)) return distance - 1;
+      
+      const deltas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      for (let delta of deltas) {
+        const [ deltaRow, deltaCol ] = delta;
+        const neighborRow = row + deltaRow;
+        const neighborCol = col + deltaCol;
+        const neighborPos = neighborRow + ',' + neighborCol;
+        if (isInbounds(grid, neighborRow, neighborCol) && !visited.has(neighborPos)) {
+          visited.add(neighborPos);
+          queue.push([neighborRow, neighborCol, distance + 1]);
+        }
+      }
+    }
+};
+  
+const isInbounds = (grid, row, col) => {
+    const rowInbounds = 0 <= row  && row < grid.length;
+    const colInbounds = 0 <= col && col < grid[0].length;
+    return rowInbounds && colInbounds;
+};
+  
+const traverseIsland = (grid, row, col, visited) => {
+    if (!isInbounds(grid, row, col) || grid[row][col] === 'W') return visited;
+    
+    const pos = row + ',' + col;
+    if (visited.has(pos)) return visited;
+    
+    visited.add(pos);
+    
+    traverseIsland(grid, row - 1, col, visited);
+    traverseIsland(grid, row + 1, col, visited);
+    traverseIsland(grid, row, col - 1, visited);
+    traverseIsland(grid, row, col + 1, visited);
+    
+    return visited;
+};
+
+
+
+
+
+//HAS CYCLE
+
+const hasCycle = (graph) => {
+    const visiting = new Set();
+    const visited = new Set();
+    
+    //could have separate components in the graph so need to iterate
+    for ( let node in graph ){
+      if(cycleDetect(graph, node, visiting, visited) === true){
+        return true;
+      }
+    }
+    
+    return false;
+};
+  
+const cycleDetect = (graph, node, visiting, visited) =>{
+    //if you have succesfully marked node as visited already -> there must not be a cycle
+    if(visited.has(node)) return false;
+    
+    //if you get to a node that is currently in progress it means that it is cyclic
+    if (visiting.has(node)) return true;
+    
+    visiting.add(node);
+    for ( let neighbor of graph[node] ) {
+      //expect a boolean of whether or not your neighbor has found a cycle
+      if(cycleDetect(graph, neighbor, visiting, visited) === true){
+        return true;
+      }
+    }
+    //after we've run through the for loop we can remove the node from visiting and place it in visited
+    visiting.delete(node);
+    visited.add(node);
+    
+    return false;
+};
+
+
+
+
+
+
+//PREREQS POSSIBLE
+
+const prereqsPossible = (numCourses, prereqs) => {
+    const visiting = new Set();
+    const visited = new Set();
+    
+    const graph = buildGraph(numCourses, prereqs);
+    for (let node in graph) {
+      if (hasCycle(graph, node, visiting, visited)) {
+        return false;
+      }
+    }
+    
+    return true;
+};
+  
+const hasCycle = (graph, node, visiting, visited) => {
+    if (visited.has(node)) return false;
+    
+    if (visiting.has(node)) return true;
+    
+    visiting.add(node);
+    
+    for (let neighbor of graph[node]) {
+      if (hasCycle(graph, neighbor, visiting, visited)) {
+        return true;    
+      }
+    }
+    
+    visiting.delete(node);
+    visited.add(node);
+    
+    return false;
+};
+  
+const buildGraph = (numCourses, prereqs) => {
+    const graph = {};
+    
+    for (let i = 0; i < numCourses; i += 1) {
+      graph[i] = [];
+    }
+    
+    for (let prereq of prereqs) {
+      const [a, b] = prereq;
+      graph[a].push(String(b));
+    }
+    
+    return graph;
+};
