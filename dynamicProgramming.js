@@ -54,3 +54,50 @@ const minChange = (amount, coins) => {
     }
     return memo[amount] = min;
 };
+
+
+
+// MIN CHANGE
+
+const minChange = (amount, coins) => {
+    const answer = _minChange(amount, coins);
+    return answer === Infinity ? -1 : answer;
+};
+  
+const _minChange = (amount, coins, memo={}) => {
+    if ( amount in memo) return memo[amount];
+    if ( amount === 0 ) return 0;
+    if ( amount < 0 ) return Infinity;
+    let minChange = Infinity;
+    
+    for( let coin of coins ){
+      const coinAmount = _minChange( amount - coin , coins, memo ) + 1;
+      minChange = Math.min(minChange, coinAmount)
+    }
+    
+    return memo[amount] = minChange;
+};
+
+
+
+
+
+
+//COUNT PATHS
+
+const countPaths = (grid, r=0, c=0, memo={}) => {
+    const pos = r + ',' + c;
+    if ( pos in memo ) return memo[pos];
+    
+    if ( r > grid.length -1 || c > grid[0].length -1 || grid[r][c] === "X" ){
+      return 0;
+    }
+    
+    if (r === grid.length-1 && c === grid[0].length-1) return 1;
+    
+    const downPath = countPaths(grid, r+1, c, memo);
+    const rightPath = countPaths(grid, r, c+1, memo);
+    
+    memo[pos] =  downPath + rightPath;  
+    return memo[pos];
+};
