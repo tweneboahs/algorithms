@@ -101,3 +101,19 @@ const countPaths = (grid, r=0, c=0, memo={}) => {
     memo[pos] =  downPath + rightPath;  
     return memo[pos];
 };
+
+//NON-ADJACENT SUM
+
+const nonAdjacentSum = (nums, i=0, memo={}) => {
+  
+  if ( i in memo ) return memo[i];
+  if ( i >= nums.length ) return 0;
+  
+  //think as binary decision -1. include element OR 2. exclude element
+  
+  const include = nums[i] + nonAdjacentSum(nums, i+2, memo);
+  const exclude = nonAdjacentSum(nums, i+1, memo);
+  
+  memo[i] = Math.max(include, exclude);
+  return memo[i];
+};
