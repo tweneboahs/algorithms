@@ -257,3 +257,111 @@ const fiveSort = (nums) => {
 };
 
 console.log(fiveSort([1,5,6,3,7,5,6]))
+
+
+
+
+
+
+
+
+
+//_________________________________________________________________________________
+//________________________________________________________________________________
+
+//                          INTERVALS
+
+
+
+//INSERT INTERVAL
+
+var insert = function(intervals, newInterval) {
+    const mergeIntervals = [];
+    
+    let i = 0;
+    let newIntervalStart = newInterval[0];
+    let newIntervalEnd = newInterval[1];
+    
+    while (i < intervals.length && intervals[i][1] < newIntervalStart){
+        mergeIntervals.push(intervals[i]);
+        i++;
+    }
+    
+    while(i < intervals.length && intervals[i][0] <= newIntervalEnd){
+        newIntervalStart = Math.min(intervals[i][0], newIntervalStart);
+        newIntervalEnd = Math.max(intervals[i][1], newIntervalEnd);
+        i++;
+    }
+    
+    mergeIntervals.push([newIntervalStart, newIntervalEnd]);
+    
+    while ( i < intervals.length ){
+        mergeIntervals.push(intervals[i]);
+        i++;
+    }
+    
+    return mergeIntervals;
+};
+
+
+
+
+
+//MERGE INTERVALS
+
+
+var merge = function(intervals) {
+    if ( intervals.length < 2 ){
+        return intervals;
+    }
+    intervals.sort((a,b) => a[0] - b[0]);
+    
+    const mergeIntervals = [];
+    let start = intervals[0][0];
+    let end = intervals[0][1];
+    
+    for ( let i = 1; i < intervals.length; i++){
+        const interval = intervals[i];
+        if ( end >= interval[0] ){
+            end = Math.max(end, interval[1])
+        } else {
+            mergeIntervals.push([start, end]);
+            start = interval[0];
+            end = interval[1];
+        }
+    }
+    
+    mergeIntervals.push([start, end]);
+    return mergeIntervals;
+};
+
+
+
+
+//NON-OVEERLAPPING INTERVALS
+
+var eraseOverlapIntervals = function(intervals) {
+    intervals.sort((a,b) => a[0] - b[0]);
+    
+    let count = 0;
+    let start = intervals[0][0];
+    let end = intervals[0][1];
+    
+    for ( let i = 1; i < intervals.length; i++ ){
+        const interval = intervals[i];
+        if( interval[0] < end ){
+            count++;
+            end = Math.min(end, interval[1]);
+        } else {
+            end = interval[1];
+        }
+    }
+    
+    return count;
+    
+};
+
+
+
+
+
