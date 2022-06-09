@@ -562,3 +562,61 @@ const addListsRec = (head1, head2, carry = 0) => {
     return resultNode;
     
 };
+
+
+//_____________________________________________________________________________
+//_____________________________________________________________________________
+
+
+
+//FROM EDUCATIVE
+
+
+//REVERSE ALTERNATE K ELEMENTS
+//Given the head of a LinkedList and a number ‘k’, reverse every alternating ‘k’ sized sub-list starting from the head.
+
+//If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
+
+function reverse_alternate_k_elements(head, k) {
+  if (k <= 1 || head === null) {
+    return head;
+  }
+
+  let current = head,
+    previous = null;
+  while (current !== null) {  // break if we've reached the end of the list
+    const last_node_of_previous_part = previous;
+    // after reversing the LinkedList 'current' will become the last node of the sub-list
+    const last_node_of_sub_list = current;
+    let next = null; // will be used to temporarily store the next node
+
+    // reverse 'k' nodes
+    let i = 0;
+    while (current !== null && i < k) {
+      next = current.next;
+      current.next = previous;
+      previous = current;
+      current = next;
+      i += 1;
+    }
+
+    // connect with the previous part
+    if (last_node_of_previous_part !== null) {
+      last_node_of_previous_part.next = previous;
+    } else {
+      head = previous;
+    }
+
+    // connect with the next part
+    last_node_of_sub_list.next = current;
+
+    // skip 'k' nodes
+    i = 0;
+    while (current !== null && i < k) {
+      previous = current;
+      current = current.next;
+      i += 1;
+    }
+  }
+  return head;
+}
