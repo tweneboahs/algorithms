@@ -159,6 +159,94 @@ function getNodeValueRec( head, index ){
 //console.log(getNodeValueRec(a, 8))
 
 
+
+
+
+//INTERSECTION OF LINKED LISTS
+var getIntersectionNode = function(headA, headB) {
+  if ( headA ===null || headB === null) return null;
+  let countA = 0;
+  let countB = 0;
+  let currA = headA;
+  let currB = headB;
+  let countDiff = 0;
+  
+  while (currA !== null){
+      countA++;
+      currA = currA.next;
+  }
+  while (currB !== null){
+      countB++;
+      currB = currB.next;
+  }
+  
+  currA = headA;
+  currB = headB;
+  
+  if (countA !== countB && countA > countB){
+      let count = 0;
+      countDiff = countA - countB;
+      while (count !== countDiff){
+          currA = currA.next;
+          count++;
+      }
+  } 
+  
+  if (countA !== countB && countB > countA){
+      let count = 0;
+      countDiff = countB - countA;
+      while (count !== countDiff){
+          currB = currB.next;
+          count++;
+      }
+  } 
+  
+  while ( currA !== null || currB !==null){
+      if (currA === currB){
+          return currA;
+      }
+      currA = currA.next;
+      currB = currB.next;
+  }
+  
+  return null;
+};
+
+
+class Node {
+  constructor(val){
+      this.val = val;
+      this.next = null;
+  }
+}
+
+// const a1 = new Node('a1');
+// const a2 = new Node('a2');
+// a1.next = a2;
+
+
+// const b1 = new Node('b1');
+// const b2 = new Node('b2');
+// const b3 = new Node('b3');
+// b1.next = b2;
+// b2.next = b3;
+
+// const c1 = new Node('c1');
+// const c2 = new Node('c2');
+// c1.next = c2;
+// //a2.next = c1;
+// b3.next = c1;
+
+// const obj = {};
+// obj[c1.val] = {count:0, next: c1.next};
+// console.log(obj)
+// console.log(getIntersectionNode(a1, b1))
+
+
+
+
+
+
 //REVERSE LIST
 function reverseList(head) {
     let current = head;
