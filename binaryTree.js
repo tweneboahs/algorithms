@@ -240,6 +240,27 @@ const treeValueCountRec = (root, target) => {
 
 
 
+//MINIMUM DEPTH OF A BINARY TREE - LEETCODE
+
+var minDepth = function(root) {
+  if (root === null) return 0;
+
+  const queue = [[root, 1]];
+  
+  while ( queue.length > 0){
+      const [curr, depth] = queue.shift();
+      if (curr.left === null && curr.right === null){
+          return depth;
+      }
+      
+      curr.left && queue.push([curr.left, depth+1]);
+      curr.right && queue.push([curr.right, depth+1]);
+  }
+
+};
+
+
+
 
 //HOW HIGH
 
