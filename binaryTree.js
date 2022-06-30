@@ -370,6 +370,39 @@ const treeLevels = (root) => {
 
 
 
+
+
+//DEEPEST LEAVES SUM  - LEETCODE
+var deepestLeavesSum = function(root) {
+  if ( root === null ) return null;
+  
+  let maxDepth = 0;
+  const collection = [[root,0]];
+  const stack = [[root, 0]]
+  
+  while (stack.length >0){
+      const [curr, depth] = stack.pop();
+      maxDepth = Math.max(depth, maxDepth);
+      curr.left && stack.push([curr.left, depth + 1]);
+      curr.right && stack.push([curr.right, depth + 1]);
+      curr.left && collection.push([curr.left, depth + 1]);
+      curr.right && collection.push([curr.right, depth + 1]);
+  }
+  
+  let sum = 0;
+  for ( let i = 0; i < collection.length; i++){
+      const [node, depth] = collection[i];
+      if ( depth === maxDepth ){
+          sum += node.val;
+      }
+  }
+  return sum;
+};
+
+
+
+
+
 //LEVEL AVERAGES
 //USING RECURSION AND HELPER FUNCTIONS
 const levelAverages = (root) => {
