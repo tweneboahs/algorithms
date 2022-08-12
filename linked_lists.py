@@ -72,5 +72,103 @@ def linked_list_find(head, target):
 
 # ______________________________________________
 
+# REVERSE LIST
+
+
+# iterative
+def reverse_list(head):
+    current = head
+    prev = None
+
+    while current != None:
+        next = current.next
+        current.next = prev
+        prev = current
+        current = next
+
+    return prev
+
+# recursive
+
+
+def reverse_list(head, prev=None):
+    if head == None:
+        return prev
+    next = head.next
+    head.next = prev
+
+    return reverse_list(next, head)
+
+# ______________________________________________
+
+# ZIPPER LISTS
+
+# iterative
+
+
+def zipper_lists(head_1, head_2):
+    tail = head_1
+    curr1 = head_1.next
+    curr2 = head_2
+
+    counter = 0
+    while curr1 is not None and curr2 is not None:
+        if counter % 2 == 0:
+            tail.next = curr2
+            curr2 = curr2.next
+        else:
+            tail.next = curr1
+            curr1 = curr1.next
+        counter += 1
+        tail = tail.next
+    if curr1 is None:
+        tail.next = curr2
+    if curr2 is None:
+        tail.next = curr1
+    return head_1
+
+
+# recursive
+
+
+def zipper_lists(head_1, head_2):
+    if head_1 is None and head_2 is None:
+        return None
+    if head_1 is None:
+        return head_2
+    if head_2 is None:
+        return head_1
+    next_1 = head_1.next
+    next_2 = head_2.next
+    head_1.next = head_2
+    head_2.next = zipper_lists(next_1, next_2)
+    return head_1
+
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
+
+# ______________________________________________
+# ______________________________________________
+
 
 # ______________________________________________
