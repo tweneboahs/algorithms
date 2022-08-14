@@ -130,7 +130,6 @@ def zipper_lists(head_1, head_2):
 
 # recursive
 
-
 def zipper_lists(head_1, head_2):
     if head_1 is None and head_2 is None:
         return None
