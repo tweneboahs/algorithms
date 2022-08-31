@@ -1,4 +1,36 @@
+# PRODUCT OF ARRAY EXCEPT ITSELF
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        prefix = []
+        postfix = []
+        prefix_product = 1
+        postfix_product = 1
+        results = []
+
+        for num in nums:
+            prefix_product *= num
+            prefix.append(prefix_product)
+
+        for num in reversed(nums):
+            postfix_product *= num
+            postfix.insert(0, postfix_product)
+
+        for index, num in enumerate(nums):
+            pre_index = index - 1
+            post_index = index + 1
+            if pre_index < 0:
+                results.append(1 * postfix[post_index])
+            elif post_index > len(nums) - 1:
+                results.append(prefix[pre_index] * 1)
+            else:
+                results.append(prefix[pre_index] * postfix[post_index])
+
+        return results
+# ________________________________________________________________
+
 # TOP K FREQUENT ELEMENTS
+
+
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         count = {}
