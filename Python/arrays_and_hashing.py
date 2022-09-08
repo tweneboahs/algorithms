@@ -73,7 +73,24 @@ class Solution:
         return longest
 
 # ________________________________________________________________
+# SUM OF UNIQUE ELEMENTS
 
+
+class Solution:
+    def sumOfUnique(self, nums: List[int]) -> int:
+        sum = 0
+        count = {}
+
+        for num in nums:
+            if num not in count:
+                count[num] = 0
+            count[num] += 1
+
+        for num in count:
+            if count[num] == 1:
+                sum += num
+
+        return sum
 # ________________________________________________________________
 
 # ________________________________________________________________
