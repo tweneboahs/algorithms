@@ -92,6 +92,21 @@ class Solution:
 
         return sum
 # ________________________________________________________________
+# MAXIMUM NUMBER OF WORDS FOUND IN SENTENCES
+
+
+class Solution:
+    def mostWordsFound(self, sentences: List[str]) -> int:
+        max_length = 0
+
+        for sentence in sentences:
+            curr_length = 1
+            for letter in sentence:
+                if letter == " ":
+                    curr_length += 1
+            max_length = max(max_length, curr_length)
+
+        return max_length
 
 # ________________________________________________________________
 
